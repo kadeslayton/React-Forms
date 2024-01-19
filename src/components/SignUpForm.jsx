@@ -7,7 +7,15 @@ export default function SignUpForm({setToken}){
 
   async function handleSubmit(e){
     e.preventDefault();
-    try{
+    if(username.length > 14){
+      setError("Username must be less than 15 characters!!");
+    }
+    else if(password.length<4){
+      setError("Password must be greater than 3 characters!!")
+    }
+    else{
+      setError(null)
+      try{
       const response = await fetch("https://fsa-jwt-practice.herokuapp.com/signup",{
         method: `POST`,
         body: JSON.stringify({username: username, password: password})
@@ -17,6 +25,7 @@ export default function SignUpForm({setToken}){
       setToken(results.token);
     }catch(error){
       setError(error.message);
+    }
     }
   }
 
@@ -35,6 +44,7 @@ export default function SignUpForm({setToken}){
         Password: <input 
         type="password"
         value={password} onChange={(e) => setPassword(e.target.value)}/>
+        
       </label>
       <button className="grid-item">Submit</button>
     </form>
